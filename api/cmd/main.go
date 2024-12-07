@@ -1,33 +1,55 @@
 package main
 
 import (
+	"api/internal/config/env"
 	"api/internal/config/logger"
+	"api/internal/database"
+	"api/internal/database/sqlc"
+	"api/internal/handler/routes"
+	"api/internal/handler/userhandler"
+	"api/internal/repository/userepository"
+	"api/internal/service/userservices"
+	"fmt"
 	"log/slog"
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
-
-type user struct {
-	Name	 string `json:"name"`
-	Age		 int `json:"Age"`
-	Password string `json:"password"`
-}
-
-func (u user) LogUser() slog.Value {
-	return slog.GroupValue(
-		slog.String("name", u.Name),
-		slog.Int("age", u.Age),
-		slog.String("password", "HIDDEN"),
-	)
-}
 
 func main() {
 	logger.InitLogger()
+	slog.Info("starting api")
 
-	user := user{
-		Name:	"Maria",
-		Age:	20,
-		Password: "meyh123",
+	_, err := env.LoadingConfig(".")
+	if err != nil {
+		slog.Error("failed to load environment variables", "err", err, slog.String("package", "main"))
+
+		return
 	}
 
-	slog.Info("starting api")
-	slog.Info("creating user", "user", user.LogUser())
+	dbConnection, err := database.NewDBConnection()
+	if err != nil {
+		slog.Error("error to connect to database", "err", err, slog.String("package", "main"))
+
+		return
+	}
+
+	router := chi.NewRouter()
+	queries := sqlc.New(dbConnection)
+
+	userRepo := userepository.NewUserRepository(dbConnection, queries)
+	newUserService := userservices.NewUserService(userRepo)
+	newUserHandler := userhandler.NewUserHandler(newUserService)
+
+
+	routes.InitUserRoutes(router, newUserHandler)
+
+	port := fmt.Sprintf(":%s", env.Env.GoPort)
+	slog.Info(fmt.Sprintf("server running on port %s", port))
+	err = http.ListenAndServe(port, router)
+
+	if err != nil {
+		slog.Error("error to start server", "err", err, slog.String("package", "main"))
+	}
+
 }
