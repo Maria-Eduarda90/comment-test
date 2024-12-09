@@ -3,6 +3,7 @@ package userservices
 import (
 	"api/internal/dto"
 	"api/internal/repository/userepository"
+	"api/internal/response"
 	"context"
 )
 
@@ -19,4 +20,5 @@ type service struct{
 type UserService interface {
 	CreateUser(ctx context.Context, u dto.CreateUserDto) error
 	UpdateUser(ctx context.Context, u dto.UpdateUserDto, id string) error
+	GetUserByID(ctx context.Context, id string) (*response.UserResponse, error)
 }
