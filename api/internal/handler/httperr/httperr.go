@@ -39,7 +39,7 @@ func NewBadRequestError(message string) *RestErr {
 func NewBadRequestValidationError(message string, fields []Fields) *RestErr {
 	return &RestErr{
 		Message: message,
-		Err: "bad_reques",
+		Err: "bad_request",
 		Code: http.StatusBadRequest,
 		Fields: fields,
 	}

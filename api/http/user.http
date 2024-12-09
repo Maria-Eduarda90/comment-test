@@ -6,3 +6,12 @@ content-type: application/json
     "email": "meyh.doe@email.com",
     "password": "12345678@"
 }
+
+### Update user
+PATCH http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+content-type: application/json
+
+  {
+    "name": "John Doe",
+    "email": "john.doe@email.com"
+  }

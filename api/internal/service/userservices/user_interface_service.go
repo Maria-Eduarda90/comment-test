@@ -1,6 +1,10 @@
 package userservices
 
-import "api/internal/repository/userepository"
+import (
+	"api/internal/dto"
+	"api/internal/repository/userepository"
+	"context"
+)
 
 func NewUserService(repository userepository.UserRepository) UserService {
 	return &service{
@@ -13,5 +17,6 @@ type service struct{
 }
 
 type UserService interface {
-	CreateUser() error
+	CreateUser(ctx context.Context, u dto.CreateUserDto) error
+	UpdateUser(ctx context.Context, u dto.UpdateUserDto, id string) error
 }
