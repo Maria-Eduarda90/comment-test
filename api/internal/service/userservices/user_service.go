@@ -46,3 +46,9 @@ func (s *service) FindManyUsers(ctx context.Context) (*response.ManyUsersRespons
 func (s *service) DeleteUser(ctx context.Context, id string) error {
 	return nil
 }
+
+func (s *service) UpdateUserPassword(ctx context.Context, u *dto.UpdateUserPasswordDto, id string) error {
+	fmt.Println("new password: ", u.Password)
+	fmt.Println("new password: ", u.OldPassword)
+	return nil
+}

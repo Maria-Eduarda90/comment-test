@@ -10,3 +10,8 @@ type UpdateUserDto struct {
 	Name     string `json:"name" validate:"omitempty,min=3,max=30"`
 	Password string `json:"password" validate:"omitempty,email"`
 }
+
+type UpdateUserPasswordDto struct {
+	Password    string `json:"password" validate:"required,min=8,max=30,containsany=!@#$%*"`
+	OldPassword string `json:"old_password" validade:"required,min=8,max=30,containsany=!@#$%*"`
+}
