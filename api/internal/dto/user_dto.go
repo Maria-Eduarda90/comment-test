@@ -7,8 +7,8 @@ type CreateUserDto struct {
 }
 
 type UpdateUserDto struct {
-	Name     string `json:"name" validate:"omitempty,min=3,max=30"`
-	Password string `json:"password" validate:"omitempty,email"`
+	Name  string `json:"name" validate:"omitempty,min=3,max=30"`
+	Email string `json:"email" validate:"omitempty,email"`
 }
 
 type UpdateUserPasswordDto struct {
