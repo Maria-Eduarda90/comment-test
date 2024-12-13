@@ -60,3 +60,11 @@ func NewForbiddenError(message string) *RestErr {
 		Code: http.StatusForbidden,
 	}
 }
+
+func NewNotFoundError(message string) *RestErr {
+	return &RestErr{
+		Message: message,
+		Err: "not_found",
+		Code: http.StatusNotFound,
+	}
+}
