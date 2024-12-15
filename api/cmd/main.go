@@ -52,4 +52,15 @@ func main() {
 		slog.Error("error to start server", "err", err, slog.String("package", "main"))
 	}
 
+	// testHash()
 }
+
+// func testHash(){
+// 	password := "Meyh123456@"
+// 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+// 	if err != nil {
+// 		fmt.Println("Error generating hash:", err)
+// 		return
+// 	}
+// 	fmt.Println("Generated Hash:", string(hash))
+// }

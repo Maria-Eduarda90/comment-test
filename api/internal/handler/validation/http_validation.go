@@ -5,26 +5,61 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"unicode"
 
 	"github.com/go-playground/validator/v10"
 )
 
-func ValidateHttpData(d interface{}) *httperr.RestErr {
-	val := validator.New(validator.WithRequiredStructEnabled())
+var val *validator.Validate
 
+func init() {
+	// Cria o validador global e registra a validação personalizada
+	val = validator.New(validator.WithRequiredStructEnabled())
+
+	// Registro da função para obter o nome do campo JSON
 	val.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
 		if name == "-" {
 			return ""
 		}
-
 		return name
 	})
 
+	// Registra a validação personalizada para `password`
+	val.RegisterValidation("password", validatePassword)
+}
+
+// Função personalizada para validar senhas
+func validatePassword(fl validator.FieldLevel) bool {
+	password := fl.Field().String()
+	var hasMinLen, hasUpper, hasLower, hasNumber, hasSpecial bool
+
+	if len(password) >= 8 {
+		hasMinLen = true
+	}
+
+	for _, char := range password {
+		switch {
+		case unicode.IsUpper(char):
+			hasUpper = true
+		case unicode.IsLower(char):
+			hasLower = true
+		case unicode.IsDigit(char):
+			hasNumber = true
+		case unicode.IsPunct(char) || unicode.IsSymbol(char):
+			hasSpecial = true
+		}
+	}
+
+	return hasMinLen && hasUpper && hasLower && hasNumber && hasSpecial
+}
+
+// Validação dos dados HTTP
+func ValidateHttpData(d interface{}) *httperr.RestErr {
 	if err := val.Struct(d); err != nil {
 		var errosCauses []httperr.Fields
 
-		for _, e := range err.(validator.ValidationErrors){
+		for _, e := range err.(validator.ValidationErrors) {
 			cause := httperr.Fields{}
 			fieldName := e.Field()
 
@@ -57,7 +92,10 @@ func ValidateHttpData(d interface{}) *httperr.RestErr {
 				cause.Message = fmt.Sprintf("%s must contain at least one of the following characters: !@#$%%*", fieldName)
 				cause.Field = fieldName
 				cause.Value = e.Value()
-
+			case "password":
+				cause.Message = fmt.Sprintf("%s must have at least 8 characters, an uppercase letter, a lowercase letter, a number, and a special character", fieldName)
+				cause.Field = fieldName
+				cause.Value = e.Value()
 			default:
 				cause.Message = "invalid field"
 				cause.Field = fieldName
