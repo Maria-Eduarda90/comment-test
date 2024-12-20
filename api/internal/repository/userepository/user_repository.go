@@ -1,21 +1,39 @@
 package userepository
 
 import (
+	"api/internal/database/sqlc"
 	"api/internal/entity"
 	"context"
 )
 
 func (r *repository) CreateUser(ctx context.Context, u *entity.UserEntity) error {
+	err := r.queries.CreateUser(ctx, sqlc.CreateUserParams{
+		ID: u.ID,
+		Name: u.Name,
+		Email: u.Email,
+		Password: u.Password,
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
+	})
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (r *repository) FindUserByEmail(ctx context.Context, email string) (*entity.UserEntity, error) {
-	userMock := entity.UserEntity{
-		ID: "1",
-		Name: "John",
-		Email: "john.doe@email.com",
+	user, err := r.queries.FindUserByEmail(ctx, email)
+	if err != nil {
+		return nil, err
 	}
-	return &userMock, nil
+	userEntity := entity.UserEntity{
+		ID: user.ID,
+		Name: user.Name,
+		Email: user.Email,
+	}
+	return &userEntity, nil
 }
 
 func (r *repository) FindUserByID(ctx context.Context, id string) (*entity.UserEntity, error) {
