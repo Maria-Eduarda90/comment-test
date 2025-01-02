@@ -5,6 +5,7 @@ import (
 	"api/internal/entity"
 	"context"
 	"database/sql"
+	"time"
 )
 
 func (r *repository) CreateUser(ctx context.Context, u *entity.UserEntity) error {
@@ -112,18 +113,29 @@ func (r *repository) FindManyUsers(ctx context.Context) ([]entity.UserEntity, er
 
 		usersEntity = append(usersEntity, userEntity)
 	}
-	return nil, nil
+	return usersEntity, nil
 }
 
 func (r *repository) UpdatePassword(ctx context.Context, pass, id string) error {
+	err := r.queries.UpdatePassword(ctx, sqlc.UpdatePasswordParams{
+		ID: id,
+		Password: pass,
+		UpdatedAt: time.Now(),
+	})
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func (r *repository) GetUserPassword(ctx context.Context, id string) (*entity.UserEntity, error) {
-	userMock := entity.UserEntity{
-		ID: "1",
-		Password: "$2a$10$i.f/A6qcKIIldTnGt3ZM8eTgWn4WaK.7MEFoC3WiUtaEuYSiHvoae",
+func (r *repository) GetUserPassword(ctx context.Context, id string) (string, error) {
+	pass, err := r.queries.GetUserPassword(ctx, id)
+
+	if err != nil {
+		return "", err
 	}
 
-	return &userMock, nil
+	return pass, nil
 }
