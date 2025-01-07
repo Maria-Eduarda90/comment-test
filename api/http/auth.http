@@ -3,7 +3,7 @@ POST http://localhost:8080/auth/login HTTP/1.1
 content-type: application/json
 
 {
-  "email": "john.doe@email.com",
+  "email": "teste.doe@email.com",
   "password": "Meyh123456@"
 }
 @token = { {login.response.body.access_token} }

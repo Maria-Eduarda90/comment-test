@@ -1,32 +1,36 @@
 
-### Create user
-POST http://localhost:8080/user HTTP/1.1
+### Create create-user
+POST http://localhost:8080/create-user HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Meyh",
-    "email": "meyh.doe@email.com",
-    "password": "12345678@"
+    "name": "teste",
+    "email": "teste.doe@email.com",
+    "password": "Meyh123456@"
 }
 
 ### Update user
-PATCH http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+PATCH http://localhost:8080/user/c9e7973d-91f9-4523-8dc3-1893d8132aac HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlLmRvZUBlbWFpbC5jb20iLCJleHAiOjE3MzYzMTk4MzAsImlkIjoiYzllNzk3M2QtOTFmOS00NTIzLThkYzMtMTg5M2Q4MTMyYWFjIiwibmFtZSI6InRlc3RlIn0.sgmfmMDmAErxg4Cn3EVVXf3cjzrff83rxt7eO5W1vYg
 
 {
     "name": "John Doe",
     "email": "john.doe@email.com"
 }
 
+
 ### GetUserByID
-GET http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+GET http://localhost:8080/user/c9e7973d-91f9-4523-8dc3-1893d8132aac HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlLmRvZUBlbWFpbC5jb20iLCJleHAiOjE3MzYzMTk4MzAsImlkIjoiYzllNzk3M2QtOTFmOS00NTIzLThkYzMtMTg5M2Q4MTMyYWFjIiwibmFtZSI6InRlc3RlIn0.sgmfmMDmAErxg4Cn3EVVXf3cjzrff83rxt7eO5W1vYg
 
 ### DeleteUser
-DELETE http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+DELETE http://localhost:8080/user/aa2a53a3-9ec2-4e76-bafa-3c274111dbcf HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlLmRvZUBlbWFpbC5jb20iLCJleHAiOjE3MzYzMTk2MzIsImlkIjoiMTU1MWE1NDQtNjAxOS00ODM2LWE4NWItNjg0ZWRhMDVkZTBjIiwibmFtZSI6InRlc3RlIn0.9QuHKHdKtJzYvc2MtKAMspguWMb2ymJanmtHxxYHB4I
 
 ### FindMany
 GET http://localhost:8080/user/list-all HTTP/1.1
 content-type: application/json
-Authorization: Bearer { {token} }
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlLmRvZUBlbWFpbC5jb20iLCJleHAiOjE3MzYzMTk2MzIsImlkIjoiMTU1MWE1NDQtNjAxOS00ODM2LWE4NWItNjg0ZWRhMDVkZTBjIiwibmFtZSI6InRlc3RlIn0.9QuHKHdKtJzYvc2MtKAMspguWMb2ymJanmtHxxYHB4I
